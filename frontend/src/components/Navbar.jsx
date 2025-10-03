@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import api from "../api";
 import { CartContext } from "../context/cartcontext";
-// import { CartContext } from "../context/CartContext";
 
 export default function Navbar() {
   const [data, setData] = useState({ logo: {}, nav_items: [] });
   const { cartItems, setIsCartOpen } = useContext(CartContext);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     api.get("navbar/")
@@ -20,69 +20,76 @@ export default function Navbar() {
         <div className="container mx-auto flex items-center justify-between p-4">
           {/* Left: Logo */}
           <div className="flex items-center gap-4">
-            <div className="w-36">
+            <div className="w-24 sm:w-36">
               {data.logo?.image ? (
-                <img src={data.logo.image} alt={data.logo.alt_text || "logo"} />
+                <img src={data.logo.image} alt={data.logo.alt_text || "logo"} className="w-full" />
               ) : (
-                <div className="text-orange-600 font-semibold">
+                <div className="text-orange-600 font-semibold text-sm sm:text-base">
                   Electric dreams
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right: Call + Book Now */}
-          <div className="flex items-center gap-6">
-            <button className="call-pill hidden md:inline-block">
+          {/* Right: Call + Book Now + Hamburger */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <button className="hidden lg:inline-block bg-orange-600 text-white rounded-full px-4 py-2 text-sm hover:bg-orange-700 transition">
               Call(+91)1234567890
             </button>
-            <button className="border border-orange-600 rounded-full px-4 py-2 text-orange-600">
+            <button className="border border-orange-600 rounded-full px-3 py-1 sm:px-4 sm:py-2 text-orange-600 text-sm sm:text-base hover:bg-orange-50 transition">
               Book Now
+            </button>
+            <button 
+              className="lg:hidden text-orange-600 text-2xl"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? '✕' : '☰'}
             </button>
           </div>
         </div>
 
         {/* 🔹 Second line (orange navbar) */}
-        <nav className="bg-orange-600">
-          <div className="container mx-auto flex items-center justify-between p-4 text-white">
+        <nav className={`bg-orange-600 ${isMobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
+          <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between p-4 text-white">
             {/* Left: Search + nav items */}
-            <div className="flex items-center gap-6">
-              <div className="hidden md:block w-96">
+            <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6 w-full">
+              <div className="w-full lg:w-80 xl:w-96">
                 <input
                   placeholder="Search electricians"
-                  className="w-full rounded-full border p-3 text-black"
+                  className="w-full rounded-full border p-2 lg:p-3 text-black text-sm lg:text-base"
                 />
               </div>
 
-              {data.nav_items?.map((item) => (
-                <div key={item.title} className="relative group">
-                  <a href={item.url} className="hover:underline">
-                    {item.title}
-                  </a>
+              <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 w-full lg:w-auto">
+                {data.nav_items?.map((item) => (
+                  <div key={item.title} className="relative group">
+                    <a href={item.url} className="hover:underline text-sm lg:text-base">
+                      {item.title}
+                    </a>
 
-                  {/* Dropdown */}
-                  {item.children?.length > 0 && (
-  <div className="absolute left-0 mt-2 w-40 bg-white text-black rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-50">
-    {item.children.map((child) => (
-      <a
-        key={child.title}
-        href={child.url}
-        className="block px-4 py-2 hover:bg-orange-100"
-      >
-        {child.title}
-      </a>
-    ))}
-  </div>
-)}
-
-                </div>
-              ))}
+                    {/* Dropdown */}
+                    {item.children?.length > 0 && (
+                      <div className="lg:absolute lg:left-0 lg:mt-2 w-full lg:w-40 bg-white text-black rounded shadow-lg lg:opacity-0 lg:group-hover:opacity-100 transition-opacity z-50">
+                        {item.children.map((child) => (
+                          <a
+                            key={child.title}
+                            href={child.url}
+                            className="block px-4 py-2 text-sm hover:bg-orange-100"
+                          >
+                            {child.title}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Right: Cart button (ONLY in orange line) */}
+            {/* Right: Cart button */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative text-white text-xl"
+              className="relative text-white text-lg lg:text-xl mt-4 lg:mt-0"
             >
               Cart
               {cartItems.length > 0 && (
