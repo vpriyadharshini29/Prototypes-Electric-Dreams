@@ -6,7 +6,7 @@ export default function Navbar() {
   const [data, setData] = useState({ logo: {}, nav_items: [] });
   const { cartItems, setIsCartOpen } = useContext(CartContext);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // ✅ For mobile dropdowns
+  const [openDropdown, setOpenDropdown] = useState(null); // ✅ Mobile state
 
   useEffect(() => {
     api
@@ -77,16 +77,15 @@ export default function Navbar() {
                     {/* Parent link */}
                     <a
                       href={item.url || "#"}
-                      className="hover:underline text-sm lg:text-base flex items-center justify-between lg:inline-block"
+                      className="hover:underline text-sm lg:text-base flex items-center justify-between"
                       onClick={(e) => {
                         if (item.children?.length > 0 && window.innerWidth < 1024) {
-                          e.preventDefault(); // prevent navigation on mobile if dropdown exists
+                          e.preventDefault();
                           setOpenDropdown(openDropdown === index ? null : index);
                         }
                       }}
                     >
                       {item.title}
-                      {/* Mobile caret */}
                       {item.children?.length > 0 && (
                         <span className="ml-2 lg:hidden">
                           {openDropdown === index ? "▲" : "▼"}
@@ -99,7 +98,7 @@ export default function Navbar() {
                       <div
                         className={`
                           absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-[9999] animate-fade-slide
-                          hidden group-hover:block  /* desktop hover */
+                          hidden group-hover:block  /* ✅ stays open when hovering dropdown too */
                           ${openDropdown === index ? "block relative mt-2 lg:hidden" : ""}
                         `}
                       >
