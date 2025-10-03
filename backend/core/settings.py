@@ -1,11 +1,17 @@
 import os
 from pathlib import Path
-from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-example'
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-example')
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+
+ALLOWED_HOSTS = [
+    'prototypes-electric-dreams.onrender.com',
+    'localhost',
+    '127.0.0.1',
+    '.vercel.app',
+    '*',  # ✅ Allow all for now (remove in production)
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -15,19 +21,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    "rest_framework_simplejwt",
-    'coreapp',
     'corsheaders',
-    "users",
+    'coreapp',
+    'users',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',   # ✅ Added here
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # ✅ Disabled for API
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -67,12 +72,13 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ---------- Static & Media ----------
+# ---------- Static Files ----------
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'    # ✅ for collectstatic
-STATICFILES_DIRS = [BASE_DIR / 'static']  # ✅ app-level static
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Whitenoise storage (compressed + cache-busting)
+# ✅ Only include if you have a static folder with files in it
+# STATICFILES_DIRS = [BASE_DIR / 'static']
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
@@ -80,14 +86,16 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ---------- CORS ----------
+# ---------- CORS (Wide Open) ----------
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = False
 
-# ---------- JWT ----------
+# ---------- REST Framework (No Auth) ----------
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    'DEFAULT_AUTHENTICATION_CLASSES': [],  # ✅ No authentication
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # ✅ Allow all
+    ]
 }
 
 AUTH_USER_MODEL = "users.CustomUser"
