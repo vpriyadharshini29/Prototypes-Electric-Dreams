@@ -70,6 +70,7 @@ export default function Navbar() {
                 />
               </div>
 
+              {/* 🔹 Nav Items */}
               <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 w-full lg:w-auto">
                 {data.nav_items?.map((item, index) => (
                   <div key={item.title} className="relative group">
@@ -93,12 +94,13 @@ export default function Navbar() {
                       )}
                     </a>
 
-                    {/* Dropdown - Desktop hover / Mobile click */}
+                    {/* Dropdown */}
                     {item.children?.length > 0 && (
                       <div
                         className={`
-                          absolute lg:group-hover:block hidden left-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-[9999] animate-fade-slide
-                          ${openDropdown === index ? "block relative mt-2 lg:hidden" : "hidden lg:group-hover:block"}
+                          absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-[9999] animate-fade-slide
+                          hidden group-hover:block  /* desktop hover */
+                          ${openDropdown === index ? "block relative mt-2 lg:hidden" : ""}
                         `}
                       >
                         {item.children.map((child) => (
