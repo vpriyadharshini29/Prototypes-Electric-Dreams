@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* simple custom styles for navbar/footer to match provided design */
+.brand-btn { @apply bg-white text-orange-600 rounded-full px-6 py-2 font-semibold; }
+.call-pill { @apply bg-orange-600 text-white rounded-full px-6 py-2 font-semibold; }
