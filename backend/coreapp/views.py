@@ -221,16 +221,3 @@ from .serializers import AreaSectionSerializer
 class AreaSectionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AreaSection.objects.all()
     serializer_class = AreaSectionSerializer
-
-
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-@api_view(['GET'])
-def test_api(request):
-    return Response({
-        'status': 'success',
-        'message': 'API is working!',
-        'method': request.method
-    })

@@ -54,5 +54,4 @@ urlpatterns = [
     path("about/services/", views.get_services),
     path("about/commitment/", views.get_commitment),
     path("contactpage/", ContactPageAPIView.as_view(), name="contactpage"),
-    path('test/', views.test_api, name='test'),
 ]
