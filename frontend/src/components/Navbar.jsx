@@ -40,7 +40,7 @@ export default function Navbar() {
               Book Now
             </button>
             <button 
-              className="lg:hidden text-orange-600 text-2xl"
+              className="lg:hidden text-orange-600 text-2xl focus:outline-none"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? '✕' : '☰'}
@@ -49,14 +49,14 @@ export default function Navbar() {
         </div>
 
         {/* 🔹 Second line (orange navbar) */}
-        <nav className={`bg-orange-600 ${isMobileMenuOpen ? 'block' : 'hidden'} lg:block`}>
+        <nav className={`bg-orange-600 transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'} lg:max-h-none lg:opacity-100 lg:block`}>
           <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between p-4 text-white">
             {/* Left: Search + nav items */}
             <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6 w-full">
               <div className="w-full lg:w-80 xl:w-96">
                 <input
                   placeholder="Search electricians"
-                  className="w-full rounded-full border p-2 lg:p-3 text-black text-sm lg:text-base"
+                  className="w-full rounded-full border p-2 lg:p-3 text-black text-sm lg:text-base focus:outline-none focus:ring-2 focus:ring-orange-600"
                 />
               </div>
 
@@ -69,12 +69,12 @@ export default function Navbar() {
 
                     {/* Dropdown */}
                     {item.children?.length > 0 && (
-                      <div className="lg:absolute lg:left-0 lg:mt-2 w-full lg:w-40 bg-white text-black rounded shadow-lg lg:opacity-0 lg:group-hover:opacity-100 transition-opacity z-50">
+                      <div className="mt-2 lg:absolute lg:left-0 lg:mt-2 w-full lg:w-48 bg-white text-black rounded shadow-lg lg:group-hover:block lg:hidden group-hover:lg:block transition-all duration-200 ease-in-out">
                         {item.children.map((child) => (
                           <a
                             key={child.title}
                             href={child.url}
-                            className="block px-4 py-2 text-sm hover:bg-orange-100"
+                            className="block px-4 py-2 text-sm hover:bg-orange-100 transition"
                           >
                             {child.title}
                           </a>
@@ -89,7 +89,7 @@ export default function Navbar() {
             {/* Right: Cart button */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative text-white text-lg lg:text-xl mt-4 lg:mt-0"
+              className="relative text-white text-lg lg:text-xl mt-4 lg:mt-0 hover:text-orange-200 transition"
             >
               Cart
               {cartItems.length > 0 && (
