@@ -8,13 +8,14 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    api.get("navbar/")
+    api
+      .get("navbar/")
       .then((res) => setData(res.data))
       .catch(console.error);
   }, []);
 
   return (
-    <header className="bg-white">
+    <header className="bg-white relative z-50">
       <div className="border-b border-orange-600">
         {/* 🔹 First line (logo + call + book now) */}
         <div className="container mx-auto flex items-center justify-between p-4">
@@ -22,7 +23,11 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <div className="w-24 sm:w-36">
               {data.logo?.image ? (
-                <img src={data.logo.image} alt={data.logo.alt_text || "logo"} className="w-full" />
+                <img
+                  src={data.logo.image}
+                  alt={data.logo.alt_text || "logo"}
+                  className="w-full"
+                />
               ) : (
                 <div className="text-orange-600 font-semibold text-sm sm:text-base">
                   Electric dreams
@@ -34,22 +39,28 @@ export default function Navbar() {
           {/* Right: Call + Book Now + Hamburger */}
           <div className="flex items-center gap-4 sm:gap-6">
             <button className="hidden lg:inline-block bg-orange-600 text-white rounded-full px-4 py-2 text-sm hover:bg-orange-700 transition">
-              Call(+91)1234567890
+              Call (+91)1234567890
             </button>
             <button className="border border-orange-600 rounded-full px-3 py-1 sm:px-4 sm:py-2 text-orange-600 text-sm sm:text-base hover:bg-orange-50 transition">
               Book Now
             </button>
-            <button 
+            <button
               className="lg:hidden text-orange-600 text-2xl focus:outline-none"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? '✕' : '☰'}
+              {isMobileMenuOpen ? "✕" : "☰"}
             </button>
           </div>
         </div>
 
         {/* 🔹 Second line (orange navbar) */}
-        <nav className={`bg-orange-600 transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0 overflow-hidden'} lg:max-h-none lg:opacity-100 lg:block`}>
+        <nav
+          className={`bg-orange-600 transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen
+              ? "max-h-screen opacity-100"
+              : "max-h-0 opacity-0 overflow-hidden"
+          } lg:max-h-none lg:opacity-100 lg:block relative z-50`}
+        >
           <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between p-4 text-white">
             {/* Left: Search + nav items */}
             <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6 w-full">
@@ -63,13 +74,16 @@ export default function Navbar() {
               <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 w-full lg:w-auto">
                 {data.nav_items?.map((item) => (
                   <div key={item.title} className="relative group">
-                    <a href={item.url} className="hover:underline text-sm lg:text-base">
+                    <a
+                      href={item.url}
+                      className="hover:underline text-sm lg:text-base"
+                    >
                       {item.title}
                     </a>
 
                     {/* Dropdown */}
                     {item.children?.length > 0 && (
-                      <div className="mt-2 lg:absolute lg:left-0 lg:mt-2 w-full lg:w-48 bg-white text-black rounded shadow-lg lg:group-hover:block lg:hidden group-hover:lg:block transition-all duration-200 ease-in-out">
+                      <div className="absolute left-0 mt-2 w-48 bg-white text-black rounded shadow-lg z-50 hidden group-hover:block animate-fade-slide">
                         {item.children.map((child) => (
                           <a
                             key={child.title}
@@ -101,6 +115,17 @@ export default function Navbar() {
           </div>
         </nav>
       </div>
+
+      {/* 🔹 Dropdown Animation */}
+      <style>{`
+        @keyframes fadeSlide {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-slide {
+          animation: fadeSlide 0.2s ease-out;
+        }
+      `}</style>
     </header>
   );
 }
